@@ -4,7 +4,7 @@ export type Role = "candidate" | "recruiter" | "admin";
 
 export interface User {
   id: string | number;
-  name: string;
+  full_name: string;
   email: string;
   role: Role;
   company_id?: string | number | null;
@@ -16,7 +16,7 @@ export interface LoginPayload {
 }
 
 export interface RegisterPayload {
-  name: string;
+  full_name: string;
   email: string;
   password: string;
   role: Role;

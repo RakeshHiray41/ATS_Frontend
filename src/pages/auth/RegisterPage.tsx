@@ -8,7 +8,7 @@ export default function RegisterPage() {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    name: "",
+    full_name: "",
     email: "",
     password: "",
     role: "candidate" as Role,
@@ -82,8 +82,8 @@ export default function RegisterPage() {
                   required
                   placeholder="Jordan Smith"
                   className="input-field !pl-10"
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  value={form.full_name}
+                  onChange={(e) => setForm({ ...form, full_name: e.target.value })}
                 />
               </div>
             </div>
