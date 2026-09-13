@@ -68,6 +68,14 @@ export default function JobDetailsPage() {
                 </div>
                 <h1 className="font-display text-2xl font-bold text-slate-900">{job.title}</h1>
                 {job.company_name && <p className="mt-1 text-sm text-slate-500">{job.company_name}</p>}
+                {job.company_id && (
+                  <Link
+                    to={`/companies/${job.company_id}`}
+                    className="mt-1 inline-block text-sm font-medium text-indigo-600 hover:underline"
+                  >
+                    View Company Profile
+                  </Link>
+                )}
                 <div className="mt-3 flex flex-wrap gap-3 text-xs font-medium text-slate-500">
                   <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1">
                     <MapPin size={12} /> {job.location}

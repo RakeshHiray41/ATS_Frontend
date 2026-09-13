@@ -15,6 +15,8 @@ export interface Application {
   candidate_id?: string | number;
   candidate_name?: string;
   candidate_email?: string;
+  candidate_phone?: string | null;
+  candidate_photo_url?: string | null;
   resume_url?: string;
   status: ApplicationStatus;
   applied_at?: string;
@@ -29,6 +31,10 @@ export const getMyApplications = () =>
 
 export const getApplicationsByJob = (jobId: string | number) =>
   api.get<Application[]>(`/applications/job/${jobId}`).then((res) => res.data);
+
+// All applicants across every vacancy this recruiter owns.
+export const getAllApplicationsForRecruiter = () =>
+  api.get<Application[]>("/applications/recruiter/all").then((res) => res.data);
 
 export const updateApplicationStatus = (id: string | number, status: ApplicationStatus) =>
   api.patch<Application>(`/applications/${id}/status`, { status }).then((res) => res.data);

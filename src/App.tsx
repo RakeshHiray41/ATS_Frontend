@@ -10,6 +10,7 @@ import RegisterPage from "./pages/auth/RegisterPage";
 import HomePage from "./pages/public/HomePage";
 import JobsPage from "./pages/public/JobsPage";
 import JobDetailsPage from "./pages/public/JobDetailsPage";
+import CompanyProfilePage from "./pages/public/CompanyProfilePage";
 import NotFoundPage from "./pages/public/NotFoundPage";
 
 import CandidateDashboard from "./pages/candidate/CandidateDashboard";
@@ -22,6 +23,7 @@ import CompanyPage from "./pages/recruiter/CompanyPage";
 import RecruiterJobsPage from "./pages/recruiter/RecruiterJobsPage";
 import CreateJobPage from "./pages/recruiter/CreateJobPage";
 import ApplicantsPage from "./pages/recruiter/ApplicantsPage";
+import CandidateProfileViewPage from "./pages/recruiter/CandidateProfileViewPage";
 import InterviewsPage from "./pages/recruiter/InterviewsPage";
 
 export default function App() {
@@ -46,6 +48,7 @@ export default function App() {
            <Route path="/home" element={<HomePage />} />
           <Route path="/jobs" element={<JobsPage />} />
           <Route path="/jobs/:id" element={<JobDetailsPage />} />
+          <Route path="/companies/:id" element={<CompanyProfilePage />} />
 
           {/* Auth */}
           <Route path="/login" element={<LoginPage />} />
@@ -69,6 +72,7 @@ export default function App() {
               <Route path="/recruiter/jobs" element={<RecruiterJobsPage />} />
               <Route path="/recruiter/jobs/create" element={<CreateJobPage />} />
               <Route path="/recruiter/applicants" element={<ApplicantsPage />} />
+              <Route path="/recruiter/applicants/:candidateId" element={<CandidateProfileViewPage />} />
               <Route path="/recruiter/interviews" element={<InterviewsPage />} />
             </Route>
           </Route>

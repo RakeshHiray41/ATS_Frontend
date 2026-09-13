@@ -24,6 +24,10 @@ export const createCompany = (payload: CompanyPayload) =>
 export const getMyCompany = () =>
   api.get<Company>("/companies/me").then((res) => res.data);
 
+// Public — used by candidates viewing a company from a job listing.
+export const getCompanyById = (id: string | number) =>
+  api.get<Company>(`/companies/${id}`).then((res) => res.data);
+
 export const updateCompany = (id: string | number, payload: Partial<CompanyPayload>) =>
   api.patch<Company>(`/companies/${id}`, payload).then((res) => res.data);
 

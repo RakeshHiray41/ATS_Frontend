@@ -14,6 +14,12 @@ export interface CandidateProfile {
   [key: string]: any;
 }
 
+export interface CandidateProfileWithUser extends CandidateProfile {
+  user_id: number;
+  full_name: string;
+  email: string;
+}
+
 export interface CurrentUser {
   id: number;
   full_name: string;
@@ -42,6 +48,10 @@ export const updateCandidateProfile = (payload: Partial<CandidateProfile>) =>
 
 export const deleteCandidateProfile = () =>
   api.delete("/profile/").then((res) => res.data);
+
+// ---- Recruiter viewing a candidate's full profile ----
+export const getCandidateProfileForRecruiter = (userId: string | number) =>
+  api.get<CandidateProfileWithUser>(`/profile/candidate/${userId}`).then((res) => res.data);
 
 export const uploadResume = (file: File) => {
   const formData = new FormData();
