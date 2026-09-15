@@ -8,6 +8,7 @@ import {
   MoreVertical,
   CalendarPlus,
   User as UserIcon,
+  Copy,
 } from "lucide-react";
 import Loading from "../../components/Loading";
 import EmptyState from "../../components/EmptyState";
@@ -45,6 +46,8 @@ export default function ApplicantsPage() {
   const [updatingId, setUpdatingId] = useState<string | number | null>(null);
   const [openMenuId, setOpenMenuId] = useState<string | number | null>(null);
   const [scheduleFor, setScheduleFor] = useState<Application | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string | number>>(new Set());
+  const [bulkUpdating, setBulkUpdating] = useState(false);
 
   const loadApplications = async () => {
     setLoading(true);
@@ -81,6 +84,17 @@ export default function ApplicantsPage() {
     return counts;
   }, [applications]);
 
+  // How many times each candidate applied (across all vacancies) — used
+  // to flag possible duplicate/repeat applicants.
+  const applicationCountByCandidate = useMemo(() => {
+    const counts: Record<string, number> = {};
+    applications.forEach((app) => {
+      const key = String(app.candidate_id);
+      counts[key] = (counts[key] ?? 0) + 1;
+    });
+    return counts;
+  }, [applications]);
+
   const filtered = useMemo(() => {
     return applications.filter((app) => {
       if (vacancyFilter !== "all" && String(app.job_id) !== vacancyFilter) return false;
@@ -104,6 +118,46 @@ export default function ApplicantsPage() {
       toast.error(getErrorMessage(err, "Could not update status"));
     } finally {
       setUpdatingId(null);
+    }
+  };
+
+  const toggleSelected = (id: string | number) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const allFilteredSelected = filtered.length > 0 && filtered.every((a) => selectedIds.has(a.id));
+
+  const toggleSelectAllFiltered = () => {
+    setSelectedIds((prev) => {
+      if (allFilteredSelected) {
+        const next = new Set(prev);
+        filtered.forEach((a) => next.delete(a.id));
+        return next;
+      }
+      const next = new Set(prev);
+      filtered.forEach((a) => next.add(a.id));
+      return next;
+    });
+  };
+
+  const handleBulkStatusChange = async (status: string) => {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+    setBulkUpdating(true);
+    try {
+      await Promise.all(ids.map((id) => updateApplicationStatus(id, status)));
+      setApplications((prev) => prev.map((a) => (selectedIds.has(a.id) ? { ...a, status } : a)));
+      toast.success(`${ids.length} candidate${ids.length > 1 ? "s" : ""} moved to ${formatStatusLabel(status)}`);
+      setSelectedIds(new Set());
+    } catch (err) {
+      toast.error(getErrorMessage(err, "Some updates failed"));
+    } finally {
+      setBulkUpdating(false);
     }
   };
 
@@ -180,6 +234,36 @@ export default function ApplicantsPage() {
               </div>
             </div>
 
+            {selectedIds.size > 0 && (
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-indigo-100 bg-indigo-50 px-4 py-2.5">
+                <p className="text-sm font-medium text-indigo-700">
+                  {selectedIds.size} selected
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    disabled={bulkUpdating}
+                    onClick={() => handleBulkStatusChange("shortlisted")}
+                    className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+                  >
+                    Shortlist Selected
+                  </button>
+                  <button
+                    disabled={bulkUpdating}
+                    onClick={() => handleBulkStatusChange("rejected")}
+                    className="rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-700 disabled:opacity-60"
+                  >
+                    Reject Selected
+                  </button>
+                  <button
+                    onClick={() => setSelectedIds(new Set())}
+                    className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-white"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+            )}
+
             {filtered.length === 0 ? (
               <EmptyState title="No matching candidates" description="Try a different search or filter." />
             ) : (
@@ -188,6 +272,14 @@ export default function ApplicantsPage() {
                   <table className="w-full text-sm">
                     <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                       <tr>
+                        <th className="w-10 px-5 py-3">
+                          <input
+                            type="checkbox"
+                            checked={allFilteredSelected}
+                            onChange={toggleSelectAllFiltered}
+                            className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                          />
+                        </th>
                         <th className="px-5 py-3">Candidate</th>
                         <th className="px-5 py-3">Email</th>
                         <th className="px-5 py-3">Contact Number</th>
@@ -199,6 +291,14 @@ export default function ApplicantsPage() {
                     <tbody className="divide-y divide-slate-100">
                       {filtered.map((app) => (
                         <tr key={app.id} className="transition hover:bg-slate-50/60">
+                          <td className="px-5 py-4">
+                            <input
+                              type="checkbox"
+                              checked={selectedIds.has(app.id)}
+                              onChange={() => toggleSelected(app.id)}
+                              className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                            />
+                          </td>
                           <td className="px-5 py-4">
                             <button
                               onClick={() =>
@@ -226,8 +326,16 @@ export default function ApplicantsPage() {
                                 )}
                               </div>
                               <div>
-                                <p className="font-medium text-slate-800 hover:text-indigo-600 hover:underline">
+                                <p className="flex items-center gap-1.5 font-medium text-slate-800 hover:text-indigo-600 hover:underline">
                                   {app.candidate_name ?? `Candidate #${app.candidate_id}`}
+                                  {applicationCountByCandidate[String(app.candidate_id)] > 1 && (
+                                    <span
+                                      title={`Applied to ${applicationCountByCandidate[String(app.candidate_id)]} of your vacancies`}
+                                      className="inline-flex items-center gap-0.5 rounded-full bg-amber-50 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700"
+                                    >
+                                      <Copy size={9} /> {applicationCountByCandidate[String(app.candidate_id)]}x
+                                    </span>
+                                  )}
                                 </p>
                                 <p className="text-xs text-slate-400">{app.job_title ?? "—"}</p>
                               </div>

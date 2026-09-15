@@ -129,6 +129,20 @@ export default function CandidateProfilePage() {
       ? form.skills.split(",").map((s) => s.trim()).filter(Boolean)
       : form.skills ?? [];
 
+  // Profile completeness — based on the fields that actually exist on this profile.
+  const completenessFields: { label: string; done: boolean }[] = [
+    { label: "Profile photo", done: !!form.photo_url },
+    { label: "Phone number", done: !!form.phone },
+    { label: "Bio", done: !!form.bio },
+    { label: "Skills", done: skillsList.length > 0 },
+    { label: "Experience", done: !!form.experience },
+    { label: "Resume", done: !!form.resume_url },
+    { label: "LinkedIn or GitHub link", done: !!(form.linkedin_url || form.github_url) },
+  ];
+  const completedCount = completenessFields.filter((f) => f.done).length;
+  const completenessPct = Math.round((completedCount / completenessFields.length) * 100);
+  const missing = completenessFields.filter((f) => !f.done).map((f) => f.label);
+
   return (
     <div className="mx-auto max-w-3xl">
       <div className="mb-6 flex items-start justify-between">
@@ -144,6 +158,26 @@ export default function CandidateProfilePage() {
           </button>
         )}
       </div>
+
+      {completenessPct < 100 && (
+        <div className="card mb-6">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold text-slate-700">Profile completeness</p>
+            <p className="text-sm font-bold text-indigo-600">{completenessPct}%</p>
+          </div>
+          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-100">
+            <div
+              className="h-full rounded-full bg-indigo-600 transition-all"
+              style={{ width: `${completenessPct}%` }}
+            />
+          </div>
+          {missing.length > 0 && (
+            <p className="mt-2.5 text-xs text-slate-500">
+              Still missing: <span className="font-medium text-slate-600">{missing.join(", ")}</span>
+            </p>
+          )}
+        </div>
+      )}
 
       <div className="card mb-6">
         <ProfilePhotoUpload

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
 
@@ -16,6 +17,7 @@ import NotFoundPage from "./pages/public/NotFoundPage";
 import CandidateDashboard from "./pages/candidate/CandidateDashboard";
 import CandidateProfilePage from "./pages/candidate/CandidateProfilePage";
 import MyApplicationsPage from "./pages/candidate/MyApplicationsPage";
+import ApplicationTrackerPage from "./pages/candidate/ApplicationTrackerPage";
 import MyInterviewsPage from "./pages/candidate/MyInterviewsPage";
 
 import RecruiterDashboard from "./pages/recruiter/RecruiterDashboard";
@@ -29,6 +31,7 @@ import InterviewsPage from "./pages/recruiter/InterviewsPage";
 export default function App() {
   return (
     <BrowserRouter>
+      <ThemeProvider>
       <AuthProvider>
         <Toaster
           position="top-right"
@@ -60,6 +63,7 @@ export default function App() {
               <Route path="/candidate/dashboard" element={<CandidateDashboard />} />
               <Route path="/candidate/profile" element={<CandidateProfilePage />} />
               <Route path="/candidate/applications" element={<MyApplicationsPage />} />
+              <Route path="/candidate/applications/:applicationId/track" element={<ApplicationTrackerPage />} />
               <Route path="/candidate/interviews" element={<MyInterviewsPage />} />
             </Route>
           </Route>
@@ -81,6 +85,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/404" replace />} />
         </Routes>
       </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }

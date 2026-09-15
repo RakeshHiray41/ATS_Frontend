@@ -13,6 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import ThemeToggle from "./ThemeToggle";
 
 interface SidebarProps {
   open: boolean;
@@ -98,6 +99,10 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         </nav>
 
         <div className="border-t border-white/10 p-3">
+          <div className="mb-1 flex items-center justify-between px-1">
+            <span className="text-xs font-medium text-slate-400">Theme</span>
+            <ThemeToggle variant="onDark" />
+          </div>
           <button
             onClick={handleLogout}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white"

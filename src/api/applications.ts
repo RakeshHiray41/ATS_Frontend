@@ -12,6 +12,7 @@ export interface Application {
   id: string | number;
   job_id: string | number;
   job_title?: string;
+  job_location?: string;
   candidate_id?: string | number;
   candidate_name?: string;
   candidate_email?: string;

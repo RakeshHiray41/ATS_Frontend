@@ -4,7 +4,7 @@ import { MapPin, Briefcase, Wallet, ArrowLeft, CheckCircle2 } from "lucide-react
 import toast from "react-hot-toast";
 import Navbar from "../../components/Navbar";
 import Loading from "../../components/Loading";
-import { getJobById, type Job } from "../../api/jobs";
+import { getJobById, getJobs, type Job } from "../../api/jobs";
 import { applyToJob } from "../../api/applications";
 import { getErrorMessage } from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
@@ -13,6 +13,7 @@ export default function JobDetailsPage() {
   const { id } = useParams();
   const { isAuthenticated, role } = useAuth();
   const [job, setJob] = useState<Job | null>(null);
+  const [similarJobs, setSimilarJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [applying, setApplying] = useState(false);
   const [applied, setApplied] = useState(false);
@@ -24,6 +25,19 @@ export default function JobDetailsPage() {
       try {
         const data = await getJobById(id);
         setJob(data);
+
+        // Similar jobs: same company first, then same location — excluding this job.
+        try {
+          const all = await getJobs();
+          const others = (Array.isArray(all) ? all : []).filter((j) => String(j.id) !== String(id));
+          const sameCompany = others.filter((j) => String(j.company_id) === String(data.company_id));
+          const sameLocation = others.filter(
+            (j) => String(j.company_id) !== String(data.company_id) && j.location === data.location
+          );
+          setSimilarJobs([...sameCompany, ...sameLocation].slice(0, 3));
+        } catch {
+          // Similar jobs are a nice-to-have — fail silently if this lookup errors.
+        }
       } catch (err) {
         toast.error(getErrorMessage(err, "Could not load job details"));
       } finally {
@@ -120,6 +134,29 @@ export default function JobDetailsPage() {
             <div className="pt-6">
               <h2 className="mb-2 font-display text-base font-semibold text-slate-900">Job Description</h2>
               <p className="whitespace-pre-line text-sm leading-relaxed text-slate-600">{job.description}</p>
+            </div>
+          </div>
+        )}
+
+        {similarJobs.length > 0 && (
+          <div className="mt-8">
+            <h2 className="mb-3 font-display text-base font-semibold text-slate-900">Similar Jobs</h2>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {similarJobs.map((sj) => (
+                <Link
+                  key={sj.id}
+                  to={`/jobs/${sj.id}`}
+                  className="card block transition hover:border-indigo-200 hover:shadow-md"
+                >
+                  <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+                    <Briefcase size={16} />
+                  </div>
+                  <p className="font-semibold text-slate-800">{sj.title}</p>
+                  <p className="mt-1 flex items-center gap-1 text-xs text-slate-500">
+                    <MapPin size={11} /> {sj.location}
+                  </p>
+                </Link>
+              ))}
             </div>
           </div>
         )}
