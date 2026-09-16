@@ -51,17 +51,50 @@ body {
 }
 
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-indigo-200 transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60 dark:shadow-none;
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-indigo-200 transition hover:bg-indigo-700 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100 dark:shadow-none;
 }
 
 .btn-secondary {
-  @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800;
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800;
 }
 
 .btn-danger {
-  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-rose-50 px-4 py-2.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-rose-950/40 dark:text-rose-400 dark:hover:bg-rose-950/60;
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-rose-50 px-4 py-2.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-100 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100 dark:bg-rose-950/40 dark:text-rose-400 dark:hover:bg-rose-950/60;
 }
 
 .card {
-  @apply rounded-2xl border border-slate-200/70 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:shadow-none;
+  @apply rounded-2xl border border-slate-200/70 bg-white p-6 shadow-sm transition-shadow dark:border-slate-800 dark:bg-slate-900 dark:shadow-none;
+}
+
+/* ---- Global dark-mode color overrides ----
+   Instead of adding a `dark:` variant to every text/bg/border class in
+   every page, we override the common slate utility classes here, once,
+   scoped under `.dark`. Any element using these classes anywhere in the
+   app gets readable colors in dark mode automatically. Specificity of
+   `.dark .text-slate-900` (2 classes) beats the plain `.text-slate-900`
+   (1 class), so no !important is needed. */
+.dark .text-slate-900,
+.dark .text-slate-800 {
+  @apply text-slate-50;
+}
+.dark .text-slate-700,
+.dark .text-slate-600 {
+  @apply text-slate-300;
+}
+.dark .text-slate-500 {
+  @apply text-slate-400;
+}
+.dark .bg-white {
+  @apply bg-slate-900;
+}
+.dark .bg-slate-50 {
+  @apply bg-slate-800;
+}
+.dark .bg-slate-100 {
+  @apply bg-slate-800;
+}
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .border-slate-300 {
+  @apply border-slate-800;
 }

@@ -39,3 +39,7 @@ export const getAllApplicationsForRecruiter = () =>
 
 export const updateApplicationStatus = (id: string | number, status: ApplicationStatus) =>
   api.patch<Application>(`/applications/${id}/status`, { status }).then((res) => res.data);
+
+// Candidate withdrawing their own application.
+export const withdrawApplication = (id: string | number) =>
+  api.delete(`/applications/${id}`).then((res) => res.data);

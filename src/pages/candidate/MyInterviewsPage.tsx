@@ -45,12 +45,12 @@ export default function MyInterviewsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-bold text-slate-900">My Interviews</h1>
-        <p className="mt-1 text-sm text-slate-500">Your upcoming interviews and meeting details.</p>
+        <h1 className="font-display text-2xl font-bold text-slate-900 dark:text-slate-50">My Interviews</h1>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Your upcoming interviews and meeting details.</p>
       </div>
 
       {loading ? (
-        <Loading label="Loading interviews..." />
+        <Loading variant="cards" cardCount={3} />
       ) : interviews.length === 0 ? (
         <EmptyState
           title="No interviews scheduled"
@@ -65,14 +65,14 @@ export default function MyInterviewsPage() {
                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
                   <CalendarClock size={18} />
                 </div>
-                <h3 className="font-display text-base font-semibold text-slate-900 flex items-center gap-1.5">
+                <h3 className="font-display text-base font-semibold text-slate-900 dark:text-slate-50 flex items-center gap-1.5">
                   <Briefcase size={14} className="text-slate-400" />
                   {iv.job_title ?? `Job #${iv.application_id}`}
                 </h3>
                 {iv.company_name && (
-                  <p className="mt-0.5 text-sm text-slate-500">{iv.company_name}</p>
+                  <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">{iv.company_name}</p>
                 )}
-                <div className="mt-3 space-y-2 text-sm text-slate-600">
+                <div className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-400">
                   <p className="flex items-center gap-2">
                     <CalendarClock size={14} className="text-slate-400" /> {date}
                   </p>

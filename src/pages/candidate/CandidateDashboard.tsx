@@ -35,10 +35,10 @@ export default function CandidateDashboard() {
     <div>
       <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className="font-display text-2xl font-bold text-slate-900">
+          <h1 className="font-display text-2xl font-bold text-slate-900 dark:text-slate-50">
             Welcome back{user?.name ? `, ${user.name.split(" ")[0]}` : ""}
           </h1>
-          <p className="mt-1 text-sm text-slate-500">Here's what's happening with your job search.</p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Here's what's happening with your job search.</p>
         </div>
         <Link to="/jobs" className="btn-primary">
           Browse Jobs
@@ -47,7 +47,7 @@ export default function CandidateDashboard() {
       </div>
 
       {loading ? (
-        <Loading label="Loading dashboard..." />
+        <Loading variant="cards" cardCount={3} />
       ) : (
         <div className="grid gap-4 sm:grid-cols-3">
           {cardConfig.map(({ key, label, icon: Icon, color }) => (
@@ -55,8 +55,8 @@ export default function CandidateDashboard() {
               <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-lg ${color}`}>
                 <Icon size={20} />
               </div>
-              <p className="font-display text-3xl font-bold text-slate-900">{stats?.[key] ?? 0}</p>
-              <p className="mt-1 text-sm text-slate-500">{label}</p>
+              <p className="font-display text-3xl font-bold text-slate-900 dark:text-slate-50">{stats?.[key] ?? 0}</p>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{label}</p>
             </div>
           ))}
         </div>
@@ -65,15 +65,15 @@ export default function CandidateDashboard() {
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         <Link to="/candidate/applications" className="card flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-md">
           <div>
-            <h3 className="font-display text-base font-semibold text-slate-900">My Applications</h3>
-            <p className="mt-1 text-sm text-slate-500">Track the status of every job you've applied to.</p>
+            <h3 className="font-display text-base font-semibold text-slate-900 dark:text-slate-50">My Applications</h3>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Track the status of every job you've applied to.</p>
           </div>
           <ArrowRight className="text-indigo-600" size={18} />
         </Link>
         <Link to="/candidate/interviews" className="card flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-md">
           <div>
-            <h3 className="font-display text-base font-semibold text-slate-900">My Interviews</h3>
-            <p className="mt-1 text-sm text-slate-500">See upcoming interviews and meeting links.</p>
+            <h3 className="font-display text-base font-semibold text-slate-900 dark:text-slate-50">My Interviews</h3>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">See upcoming interviews and meeting links.</p>
           </div>
           <ArrowRight className="text-indigo-600" size={18} />
         </Link>

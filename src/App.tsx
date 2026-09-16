@@ -41,8 +41,16 @@ export default function App() {
               borderRadius: "10px",
               fontSize: "13.5px",
               fontWeight: 500,
+              padding: "10px 14px",
             },
-            success: { iconTheme: { primary: "#4f46e5", secondary: "#fff" } },
+            success: {
+              iconTheme: { primary: "#059669", secondary: "#fff" },
+              style: { borderLeft: "3px solid #059669" },
+            },
+            error: {
+              iconTheme: { primary: "#e11d48", secondary: "#fff" },
+              style: { borderLeft: "3px solid #e11d48" },
+            },
           }}
         />
         <Routes>

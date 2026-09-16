@@ -11,6 +11,8 @@ import {
   Users,
   LogOut,
   X,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import ThemeToggle from "./ThemeToggle";
@@ -18,6 +20,8 @@ import ThemeToggle from "./ThemeToggle";
 interface SidebarProps {
   open: boolean;
   onClose: () => void;
+  collapsed: boolean;
+  onToggleCollapse: () => void;
 }
 
 const candidateLinks = [
@@ -37,7 +41,7 @@ const recruiterLinks = [
   { to: "/recruiter/interviews", label: "Interviews", icon: CalendarClock },
 ];
 
-export default function Sidebar({ open, onClose }: SidebarProps) {
+export default function Sidebar({ open, onClose, collapsed, onToggleCollapse }: SidebarProps) {
   const { role, logout } = useAuth();
   const navigate = useNavigate();
   const links = role === "recruiter" ? recruiterLinks : candidateLinks;
@@ -57,25 +61,41 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         />
       )}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-slate-900 transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex flex-col bg-slate-900 transition-all duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
-        }`}
+        } ${collapsed ? "lg:w-20" : "w-64 lg:w-64"}`}
       >
-        <div className="flex h-16 items-center justify-between px-5">
+        <div className={`flex h-16 items-center px-5 ${collapsed ? "lg:justify-center lg:px-0" : "justify-between"}`}>
           <div className="flex items-center gap-2 font-display text-lg font-bold text-white">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-600">
               <Briefcase size={18} />
             </span>
-            Hire<span className="text-indigo-400">Track</span>
+            <span className={collapsed ? "lg:hidden" : ""}>
+              Hire<span className="text-indigo-400">Track</span>
+            </span>
           </div>
           <button onClick={onClose} className="text-slate-400 hover:text-white lg:hidden">
             <X size={20} />
           </button>
         </div>
 
-        <div className="mx-4 mb-2 mt-1 rounded-lg bg-white/5 px-3 py-2 text-xs font-medium uppercase tracking-wide text-slate-400">
-          {role === "recruiter" ? "Recruiter Workspace" : "Candidate Workspace"}
-        </div>
+        {/* Collapse/expand toggle — desktop only, mobile uses the hamburger + overlay instead */}
+        <button
+          onClick={onToggleCollapse}
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className={`mx-3 mb-1 mt-1 hidden items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-slate-400 transition hover:bg-white/5 hover:text-white lg:flex ${
+            collapsed ? "justify-center" : ""
+          }`}
+        >
+          {collapsed ? <PanelLeftOpen size={18} strokeWidth={1.9} /> : <PanelLeftClose size={18} strokeWidth={1.9} />}
+          {!collapsed && "Collapse"}
+        </button>
+
+        {!collapsed && (
+          <div className="mx-4 mb-2 mt-1 rounded-lg bg-white/5 px-3 py-2 text-xs font-medium uppercase tracking-wide text-slate-400">
+            {role === "recruiter" ? "Recruiter Workspace" : "Candidate Workspace"}
+          </div>
+        )}
 
         <nav className="flex-1 space-y-1 px-3 py-2">
           {links.map(({ to, label, icon: Icon, end }) => (
@@ -84,31 +104,37 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
               to={to}
               end={end}
               onClick={onClose}
+              title={collapsed ? label : undefined}
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+                  collapsed ? "lg:justify-center" : ""
+                } ${
                   isActive
                     ? "bg-indigo-600 text-white shadow-sm"
                     : "text-slate-300 hover:bg-white/5 hover:text-white"
                 }`
               }
             >
-              <Icon size={18} strokeWidth={1.9} />
-              {label}
+              <Icon size={18} strokeWidth={1.9} className="shrink-0" />
+              <span className={collapsed ? "lg:hidden" : ""}>{label}</span>
             </NavLink>
           ))}
         </nav>
 
         <div className="border-t border-white/10 p-3">
-          <div className="mb-1 flex items-center justify-between px-1">
-            <span className="text-xs font-medium text-slate-400">Theme</span>
+          <div className={`mb-1 flex items-center px-1 ${collapsed ? "lg:justify-center" : "justify-between"}`}>
+            <span className={`text-xs font-medium text-slate-400 ${collapsed ? "lg:hidden" : ""}`}>Theme</span>
             <ThemeToggle variant="onDark" />
           </div>
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white"
+            title={collapsed ? "Logout" : undefined}
+            className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white ${
+              collapsed ? "lg:justify-center" : ""
+            }`}
           >
-            <LogOut size={18} strokeWidth={1.9} />
-            Logout
+            <LogOut size={18} strokeWidth={1.9} className="shrink-0" />
+            <span className={collapsed ? "lg:hidden" : ""}>Logout</span>
           </button>
         </div>
       </aside>

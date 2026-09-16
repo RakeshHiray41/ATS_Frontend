@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import Loading from "../../components/Loading";
 import EmptyState from "../../components/EmptyState";
+import Avatar from "../../components/Avatar";
 import {
   getAllApplicationsForRecruiter,
   updateApplicationStatus,
@@ -164,12 +165,12 @@ export default function ApplicantsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-bold text-slate-900">Applicants</h1>
-        <p className="mt-1 text-sm text-slate-500">Review candidates and move them through your pipeline.</p>
+        <h1 className="font-display text-2xl font-bold text-slate-900 dark:text-slate-50">Applicants</h1>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Review candidates and move them through your pipeline.</p>
       </div>
 
       {loading ? (
-        <Loading label="Loading applicants..." />
+        <Loading variant="table" rows={5} columns={6} />
       ) : applications.length === 0 ? (
         <EmptyState title="No applicants yet" description="Candidates who apply to your jobs will show up here." />
       ) : (
@@ -196,7 +197,7 @@ export default function ApplicantsPage() {
               <button
                 onClick={() => setStageFilter("all")}
                 className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition ${
-                  stageFilter === "all" ? "bg-indigo-50 text-indigo-700" : "text-slate-600 hover:bg-slate-50"
+                  stageFilter === "all" ? "bg-indigo-50 text-indigo-700" : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                 }`}
               >
                 <span>All Candidates</span>
@@ -207,7 +208,7 @@ export default function ApplicantsPage() {
                   key={status}
                   onClick={() => setStageFilter(status)}
                   className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition ${
-                    stageFilter === status ? "bg-indigo-50 text-indigo-700" : "text-slate-600 hover:bg-slate-50"
+                    stageFilter === status ? "bg-indigo-50 text-indigo-700" : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                   }`}
                 >
                   <span>{formatStatusLabel(status)}</span>
@@ -220,7 +221,7 @@ export default function ApplicantsPage() {
           {/* Main list */}
           <div className="min-w-0">
             <div className="mb-4 flex items-center justify-between gap-3">
-              <p className="text-sm font-semibold text-slate-700">
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                 ({filtered.length}) Candidates Found
               </p>
               <div className="relative w-full max-w-xs">
@@ -256,7 +257,7 @@ export default function ApplicantsPage() {
                   </button>
                   <button
                     onClick={() => setSelectedIds(new Set())}
-                    className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-white"
+                    className="rounded-lg border border-slate-200 dark:border-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-white"
                   >
                     Clear
                   </button>
@@ -270,7 +271,7 @@ export default function ApplicantsPage() {
               <div className="card !p-0 overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
-                    <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    <thead className="sticky top-16 z-10 lg:top-0 bg-slate-50 dark:bg-slate-800/60 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                       <tr>
                         <th className="w-10 px-5 py-3">
                           <input
@@ -290,7 +291,7 @@ export default function ApplicantsPage() {
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {filtered.map((app) => (
-                        <tr key={app.id} className="transition hover:bg-slate-50/60">
+                        <tr key={app.id} className="transition hover:bg-slate-50 dark:hover:bg-slate-800/60/60">
                           <td className="px-5 py-4">
                             <input
                               type="checkbox"
@@ -308,25 +309,9 @@ export default function ApplicantsPage() {
                               }
                               className="flex items-center gap-3 text-left"
                             >
-                              <div className="h-9 w-9 shrink-0 overflow-hidden rounded-full bg-indigo-50">
-                                {app.candidate_photo_url ? (
-                                  <img
-                                    src={app.candidate_photo_url}
-                                    alt={app.candidate_name ?? "Candidate"}
-                                    className="h-full w-full object-cover"
-                                  />
-                                ) : (
-                                  <div className="flex h-full w-full items-center justify-center text-sm font-semibold text-indigo-400">
-                                    {app.candidate_name ? (
-                                      app.candidate_name.charAt(0).toUpperCase()
-                                    ) : (
-                                      <UserIcon size={16} />
-                                    )}
-                                  </div>
-                                )}
-                              </div>
+                              <Avatar name={app.candidate_name} photoUrl={app.candidate_photo_url} size="md" />
                               <div>
-                                <p className="flex items-center gap-1.5 font-medium text-slate-800 hover:text-indigo-600 hover:underline">
+                                <p className="flex items-center gap-1.5 font-medium text-slate-800 dark:text-slate-200 hover:text-indigo-600 hover:underline">
                                   {app.candidate_name ?? `Candidate #${app.candidate_id}`}
                                   {applicationCountByCandidate[String(app.candidate_id)] > 1 && (
                                     <span
@@ -341,9 +326,9 @@ export default function ApplicantsPage() {
                               </div>
                             </button>
                           </td>
-                          <td className="px-5 py-4 text-slate-500">{app.candidate_email ?? "—"}</td>
-                          <td className="px-5 py-4 text-slate-500">{app.candidate_phone ?? "—"}</td>
-                          <td className="px-5 py-4 text-slate-500">
+                          <td className="px-5 py-4 text-slate-500 dark:text-slate-400">{app.candidate_email ?? "—"}</td>
+                          <td className="px-5 py-4 text-slate-500 dark:text-slate-400">{app.candidate_phone ?? "—"}</td>
+                          <td className="px-5 py-4 text-slate-500 dark:text-slate-400">
                             {app.applied_at
                               ? new Date(app.applied_at).toLocaleDateString(undefined, {
                                   year: "numeric",
@@ -370,13 +355,13 @@ export default function ApplicantsPage() {
                             <div className="relative flex justify-end">
                               <button
                                 onClick={() => setOpenMenuId(openMenuId === app.id ? null : app.id)}
-                                className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100"
+                                className="rounded-lg p-2 text-slate-500 dark:text-slate-400 transition hover:bg-slate-100 dark:hover:bg-slate-800"
                               >
                                 <MoreVertical size={16} />
                               </button>
                               {openMenuId === app.id && (
                                 <div
-                                  className="absolute right-0 top-9 z-10 w-48 overflow-hidden rounded-xl border border-slate-100 bg-white py-1 shadow-lg"
+                                  className="absolute right-0 top-9 z-10 w-48 overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-white py-1 shadow-lg"
                                   onMouseLeave={() => setOpenMenuId(null)}
                                 >
                                   <button
@@ -386,7 +371,7 @@ export default function ApplicantsPage() {
                                         state: { application: app, jobTitle: app.job_title },
                                       });
                                     }}
-                                    className="flex w-full items-center gap-2 px-3.5 py-2 text-left text-sm text-slate-600 hover:bg-slate-50"
+                                    className="flex w-full items-center gap-2 px-3.5 py-2 text-left text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                                   >
                                     <UserIcon size={14} /> View Profile
                                   </button>
@@ -395,7 +380,7 @@ export default function ApplicantsPage() {
                                       setOpenMenuId(null);
                                       setScheduleFor(app);
                                     }}
-                                    className="flex w-full items-center gap-2 px-3.5 py-2 text-left text-sm text-slate-600 hover:bg-slate-50"
+                                    className="flex w-full items-center gap-2 px-3.5 py-2 text-left text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                                   >
                                     <CalendarPlus size={14} /> Schedule Interview
                                   </button>
@@ -405,7 +390,7 @@ export default function ApplicantsPage() {
                                       target="_blank"
                                       rel="noreferrer"
                                       onClick={() => setOpenMenuId(null)}
-                                      className="flex w-full items-center gap-2 px-3.5 py-2 text-left text-sm text-slate-600 hover:bg-slate-50"
+                                      className="flex w-full items-center gap-2 px-3.5 py-2 text-left text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                                     >
                                       <FileText size={14} /> View Resume <ExternalLink size={11} />
                                     </a>
@@ -491,8 +476,8 @@ function ScheduleInterviewModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 px-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl animate-fade-in">
-        <h2 className="font-display text-lg font-bold text-slate-900">Schedule Interview</h2>
-        <p className="mt-1 text-sm text-slate-500">
+        <h2 className="font-display text-lg font-bold text-slate-900 dark:text-slate-50">Schedule Interview</h2>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
           With {application.candidate_name ?? `Candidate #${application.candidate_id}`}
         </p>
 

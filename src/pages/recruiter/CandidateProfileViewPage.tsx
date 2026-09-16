@@ -5,11 +5,11 @@ import {
   ArrowLeft,
   GitFork,
   Link as LinkIcon,
-  User as UserIcon,
 } from "lucide-react";
 import Loading from "../../components/Loading";
 import EmptyState from "../../components/EmptyState";
 import StatusBadge from "../../components/StatusBadge";
+import Avatar from "../../components/Avatar";
 import {
   getCandidateProfileForRecruiter,
   type CandidateProfileWithUser,
@@ -22,7 +22,7 @@ type TabKey = "details" | "resume" | "social" | "additional";
 const TABS: { key: TabKey; label: string }[] = [
   { key: "details", label: "Details" },
   { key: "resume", label: "Resume" },
-  { key: "social", label: "Links" },
+  { key: "social", label: "Social Media Links" },
   { key: "additional", label: "Additional Information" },
 ];
 
@@ -43,7 +43,6 @@ export default function CandidateProfileViewPage() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [activeTab, setActiveTab] = useState<TabKey>("details");
-  const [photoError, setPhotoError] = useState(false);
 
   const jobId = searchParams.get("job");
 
@@ -87,7 +86,7 @@ export default function CandidateProfileViewPage() {
     <div className="mx-auto max-w-5xl">
       <button
         onClick={() => navigate(backHref)}
-        className="mb-5 inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-slate-800"
+        className="mb-5 inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800"
       >
         <ArrowLeft size={16} /> Back to applicants
       </button>
@@ -103,33 +102,16 @@ export default function CandidateProfileViewPage() {
         <div className="grid gap-6 sm:grid-cols-[240px_1fr]">
           {/* Left sidebar */}
           <div className="card flex flex-col items-center text-center">
-            <div className="h-36 w-36 overflow-hidden rounded-full bg-indigo-50 ring-4 ring-white shadow-sm">
-              {profile.photo_url && !photoError ? (
-                <img
-                  src={profile.photo_url}
-                  alt={profile.full_name}
-                  className="h-full w-full object-cover"
-                  onError={() => setPhotoError(true)}
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center text-3xl font-semibold text-indigo-400">
-                  {profile.full_name ? (
-                    profile.full_name.charAt(0).toUpperCase()
-                  ) : (
-                    <UserIcon size={40} />
-                  )}
-                </div>
-              )}
-            </div>
+            <Avatar name={profile.full_name} photoUrl={profile.photo_url} size="xl" className="ring-4 ring-white shadow-sm dark:ring-slate-800" />
 
-            <h1 className="font-display mt-4 text-lg font-bold uppercase tracking-wide text-slate-900">
+            <h1 className="font-display mt-4 text-lg font-bold uppercase tracking-wide text-slate-900 dark:text-slate-50">
               {profile.full_name}
             </h1>
           </div>
 
           {/* Right: tabs + content */}
           <div className="card !p-0 min-w-0 overflow-hidden">
-            <div className="flex gap-1 overflow-x-auto border-b border-slate-100 px-4 pt-3">
+            <div className="flex gap-1 overflow-x-auto border-b border-slate-100 dark:border-slate-800 px-4 pt-3">
               {TABS.map((tab) => (
                 <button
                   key={tab.key}
@@ -137,7 +119,7 @@ export default function CandidateProfileViewPage() {
                   className={`whitespace-nowrap rounded-t-lg px-3.5 py-2 text-sm font-semibold transition ${
                     activeTab === tab.key
                       ? "border-b-2 border-indigo-600 text-indigo-600"
-                      : "text-slate-500 hover:text-slate-700"
+                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700"
                   }`}
                 >
                   {tab.label}
@@ -156,18 +138,18 @@ export default function CandidateProfileViewPage() {
                       <div className="grid gap-4 sm:grid-cols-3">
                         <div>
                           <p className="label-field">Job Title</p>
-                          <p className="text-slate-900">{navState.jobTitle || "—"}</p>
+                          <p className="text-slate-900 dark:text-slate-50">{navState.jobTitle || "—"}</p>
                         </div>
                         <div>
                           <p className="label-field">Date of Application</p>
-                          <p className="text-slate-900">{appliedAtLabel}</p>
+                          <p className="text-slate-900 dark:text-slate-50">{appliedAtLabel}</p>
                         </div>
                         <div>
                           <p className="label-field">Status</p>
                           {navState.application?.status ? (
                             <StatusBadge status={navState.application.status} />
                           ) : (
-                            <p className="text-slate-900">—</p>
+                            <p className="text-slate-900 dark:text-slate-50">—</p>
                           )}
                         </div>
                       </div>
@@ -181,11 +163,11 @@ export default function CandidateProfileViewPage() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
                         <p className="label-field">Full Name</p>
-                        <p className="text-slate-900">{profile.full_name}</p>
+                        <p className="text-slate-900 dark:text-slate-50">{profile.full_name}</p>
                       </div>
                       <div>
                         <p className="label-field">Experience</p>
-                        <p className="text-slate-900">{profile.experience || "—"}</p>
+                        <p className="text-slate-900 dark:text-slate-50">{profile.experience || "—"}</p>
                       </div>
                     </div>
                   </div>
@@ -197,11 +179,11 @@ export default function CandidateProfileViewPage() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
                         <p className="label-field">Email</p>
-                        <p className="text-slate-900">{profile.email}</p>
+                        <p className="text-slate-900 dark:text-slate-50">{profile.email}</p>
                       </div>
                       <div>
                         <p className="label-field">Contact Number</p>
-                        <p className="text-slate-900">{profile.phone || "—"}</p>
+                        <p className="text-slate-900 dark:text-slate-50">{profile.phone || "—"}</p>
                       </div>
                     </div>
                   </div>
@@ -211,7 +193,7 @@ export default function CandidateProfileViewPage() {
               {activeTab === "resume" && (
                 <div>
                   {profile.resume_url ? (
-                    <div className="overflow-hidden rounded-xl border border-slate-200">
+                    <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800">
                       <iframe
                         src={profile.resume_url}
                         title={`${profile.full_name}'s resume`}
@@ -242,7 +224,7 @@ export default function CandidateProfileViewPage() {
                           <LinkIcon size={14} /> {profile.linkedin_url}
                         </a>
                       ) : (
-                        <p className="text-slate-900">—</p>
+                        <p className="text-slate-900 dark:text-slate-50">—</p>
                       )}
                     </div>
                     <div>
@@ -257,7 +239,7 @@ export default function CandidateProfileViewPage() {
                           <GitFork size={14} /> {profile.github_url}
                         </a>
                       ) : (
-                        <p className="text-slate-900">—</p>
+                        <p className="text-slate-900 dark:text-slate-50">—</p>
                       )}
                     </div>
                   </div>
@@ -268,7 +250,7 @@ export default function CandidateProfileViewPage() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <p className="label-field">Bio</p>
-                    <p className="whitespace-pre-wrap text-slate-900">{profile.bio || "—"}</p>
+                    <p className="whitespace-pre-wrap text-slate-900 dark:text-slate-50">{profile.bio || "—"}</p>
                   </div>
                   <div>
                     <p className="label-field">Skills</p>
@@ -284,7 +266,7 @@ export default function CandidateProfileViewPage() {
                         ))}
                       </div>
                     ) : (
-                      <p className="text-slate-900">—</p>
+                      <p className="text-slate-900 dark:text-slate-50">—</p>
                     )}
                   </div>
                 </div>

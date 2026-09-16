@@ -73,14 +73,14 @@ export default function InterviewsPage() {
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-bold text-slate-900">Interviews</h1>
-          <p className="mt-1 text-sm text-slate-500">All interviews scheduled across your job openings.</p>
+          <h1 className="font-display text-2xl font-bold text-slate-900 dark:text-slate-50">Interviews</h1>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">All interviews scheduled across your job openings.</p>
         </div>
-        <div className="flex overflow-hidden rounded-lg border border-slate-200">
+        <div className="flex overflow-hidden rounded-lg border border-slate-200 dark:border-slate-800">
           <button
             onClick={() => setView("list")}
             className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold ${
-              view === "list" ? "bg-indigo-600 text-white" : "bg-white text-slate-600 hover:bg-slate-50"
+              view === "list" ? "bg-indigo-600 text-white" : "bg-white text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
             }`}
           >
             <List size={14} /> List
@@ -88,7 +88,7 @@ export default function InterviewsPage() {
           <button
             onClick={() => setView("calendar")}
             className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold ${
-              view === "calendar" ? "bg-indigo-600 text-white" : "bg-white text-slate-600 hover:bg-slate-50"
+              view === "calendar" ? "bg-indigo-600 text-white" : "bg-white text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
             }`}
           >
             <CalendarDays size={14} /> Calendar
@@ -97,7 +97,7 @@ export default function InterviewsPage() {
       </div>
 
       {loading ? (
-        <Loading label="Loading interviews..." />
+        <Loading variant="table" rows={5} columns={5} />
       ) : interviews.length === 0 ? (
         <EmptyState
           title="No interviews scheduled"
@@ -107,7 +107,7 @@ export default function InterviewsPage() {
         <div className="card !p-0 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <thead className="sticky top-16 z-10 lg:top-0 bg-slate-50 dark:bg-slate-800/60 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                 <tr>
                   <th className="px-5 py-3">Candidate</th>
                   <th className="px-5 py-3">Job</th>
@@ -120,20 +120,20 @@ export default function InterviewsPage() {
                 {interviews.map((iv) => {
                   const { date, time } = formatDateTime(iv.interview_date);
                   return (
-                    <tr key={iv.id} className="transition hover:bg-slate-50/60">
-                      <td className="px-5 py-4 font-medium text-slate-800">
+                    <tr key={iv.id} className="transition hover:bg-slate-50 dark:hover:bg-slate-800/60/60">
+                      <td className="px-5 py-4 font-medium text-slate-800 dark:text-slate-200">
                         <span className="flex items-center gap-1.5">
                           <User size={14} className="text-slate-400" />
                           {iv.candidate_name ?? `Application #${iv.application_id}`}
                         </span>
                       </td>
-                      <td className="px-5 py-4 text-slate-600">
+                      <td className="px-5 py-4 text-slate-600 dark:text-slate-400">
                         <span className="flex items-center gap-1.5">
                           <Briefcase size={14} className="text-slate-400" />
                           {iv.job_title ?? "—"}
                         </span>
                       </td>
-                      <td className="px-5 py-4 text-slate-600">
+                      <td className="px-5 py-4 text-slate-600 dark:text-slate-400">
                         <span className="flex items-center gap-1.5">
                           <CalendarClock size={14} className="text-slate-400" />
                           {date} {time && `· ${time}`}
@@ -171,16 +171,16 @@ export default function InterviewsPage() {
             <div className="mb-4 flex items-center justify-between">
               <button
                 onClick={() => setMonthCursor(new Date(monthCursor.getFullYear(), monthCursor.getMonth() - 1, 1))}
-                className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100"
+                className="rounded-lg p-1.5 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
               >
                 <ChevronLeft size={18} />
               </button>
-              <p className="font-display text-base font-semibold text-slate-900">
+              <p className="font-display text-base font-semibold text-slate-900 dark:text-slate-50">
                 {monthCursor.toLocaleDateString(undefined, { month: "long", year: "numeric" })}
               </p>
               <button
                 onClick={() => setMonthCursor(new Date(monthCursor.getFullYear(), monthCursor.getMonth() + 1, 1))}
-                className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100"
+                className="rounded-lg p-1.5 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
               >
                 <ChevronRight size={18} />
               </button>
@@ -208,10 +208,10 @@ export default function InterviewsPage() {
                         ? "border-indigo-600 bg-indigo-50"
                         : isToday
                         ? "border-indigo-200 bg-white"
-                        : "border-transparent hover:bg-slate-50"
+                        : "border-transparent hover:bg-slate-50 dark:hover:bg-slate-800/60"
                     }`}
                   >
-                    <span className={`font-medium ${isToday ? "text-indigo-600" : "text-slate-700"}`}>
+                    <span className={`font-medium ${isToday ? "text-indigo-600" : "text-slate-700 dark:text-slate-300"}`}>
                       {day.getDate()}
                     </span>
                     {dayInterviews.length > 0 && (
@@ -224,7 +224,7 @@ export default function InterviewsPage() {
           </div>
 
           <div className="card">
-            <p className="mb-3 text-sm font-semibold text-slate-700">
+            <p className="mb-3 text-sm font-semibold text-slate-700 dark:text-slate-300">
               {selectedDay
                 ? selectedDay.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })
                 : "Select a day"}
@@ -238,11 +238,11 @@ export default function InterviewsPage() {
                 {selectedDayInterviews.map((iv) => {
                   const { time } = formatDateTime(iv.interview_date);
                   return (
-                    <div key={iv.id} className="rounded-xl border border-slate-100 p-3">
-                      <p className="text-sm font-semibold text-slate-800">
+                    <div key={iv.id} className="rounded-xl border border-slate-100 dark:border-slate-800 p-3">
+                      <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
                         {iv.candidate_name ?? `Application #${iv.application_id}`}
                       </p>
-                      <p className="text-xs text-slate-500">{iv.job_title ?? "—"}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">{iv.job_title ?? "—"}</p>
                       <p className="mt-1 text-xs font-medium text-indigo-600">{time}</p>
                       {iv.meeting_link && (
                         <a

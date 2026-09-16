@@ -35,10 +35,10 @@ export default function RecruiterDashboard() {
     <div>
       <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className="font-display text-2xl font-bold text-slate-900">
+          <h1 className="font-display text-2xl font-bold text-slate-900 dark:text-slate-50">
             Welcome back{user?.name ? `, ${user.name.split(" ")[0]}` : ""}
           </h1>
-          <p className="mt-1 text-sm text-slate-500">Here's how your hiring pipeline is doing.</p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Here's how your hiring pipeline is doing.</p>
         </div>
         <Link to="/recruiter/jobs/create" className="btn-primary">
           <PlusCircle size={16} />
@@ -47,7 +47,7 @@ export default function RecruiterDashboard() {
       </div>
 
       {loading ? (
-        <Loading label="Loading dashboard..." />
+        <Loading variant="cards" cardCount={3} />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {cardConfig.map(({ key, label, icon: Icon, color }) => (
@@ -55,18 +55,18 @@ export default function RecruiterDashboard() {
               <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-lg ${color}`}>
                 <Icon size={20} />
               </div>
-              <p className="font-display text-3xl font-bold text-slate-900">{stats?.[key] ?? 0}</p>
-              <p className="mt-1 text-sm text-slate-500">{label}</p>
+              <p className="font-display text-3xl font-bold text-slate-900 dark:text-slate-50">{stats?.[key] ?? 0}</p>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{label}</p>
             </div>
           ))}
           <div className="card">
-            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
+            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
               <Building2 size={20} />
             </div>
-            <p className="font-display text-lg font-bold text-slate-900 truncate">
+            <p className="font-display text-lg font-bold text-slate-900 dark:text-slate-50 truncate">
               {stats?.company ?? "Not set up"}
             </p>
-            <p className="mt-1 text-sm text-slate-500">Company</p>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Company</p>
           </div>
         </div>
       )}
@@ -74,22 +74,22 @@ export default function RecruiterDashboard() {
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
         <Link to="/recruiter/jobs" className="card flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-md">
           <div>
-            <h3 className="font-display text-base font-semibold text-slate-900">Manage Jobs</h3>
-            <p className="mt-1 text-sm text-slate-500">Edit or remove your active listings.</p>
+            <h3 className="font-display text-base font-semibold text-slate-900 dark:text-slate-50">Manage Jobs</h3>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Edit or remove your active listings.</p>
           </div>
           <ArrowRight className="text-indigo-600" size={18} />
         </Link>
         <Link to="/recruiter/applicants" className="card flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-md">
           <div>
-            <h3 className="font-display text-base font-semibold text-slate-900">Applicants</h3>
-            <p className="mt-1 text-sm text-slate-500">Review and shortlist candidates.</p>
+            <h3 className="font-display text-base font-semibold text-slate-900 dark:text-slate-50">Applicants</h3>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Review and shortlist candidates.</p>
           </div>
           <ArrowRight className="text-indigo-600" size={18} />
         </Link>
         <Link to="/recruiter/interviews" className="card flex items-center justify-between transition hover:-translate-y-0.5 hover:shadow-md">
           <div>
-            <h3 className="font-display text-base font-semibold text-slate-900">Interviews</h3>
-            <p className="mt-1 text-sm text-slate-500">Schedule and track interviews.</p>
+            <h3 className="font-display text-base font-semibold text-slate-900 dark:text-slate-50">Interviews</h3>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Schedule and track interviews.</p>
           </div>
           <ArrowRight className="text-indigo-600" size={18} />
         </Link>
