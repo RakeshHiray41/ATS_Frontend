@@ -114,7 +114,7 @@ export default function CandidateProfilePage() {
       await deleteMyAccount();
       toast.success("Account deleted");
       localStorage.removeItem("token");
-      window.location.href = "/login";
+      window.location.href = "/";
     } catch (err) {
       toast.error(getErrorMessage(err, "Could not delete account"));
       setDeleting(false);
@@ -147,8 +147,8 @@ export default function CandidateProfilePage() {
     <div className="mx-auto max-w-3xl">
       <div className="mb-6 flex items-start justify-between">
         <div>
-          <h1 className="font-display text-2xl font-bold text-slate-900">My Profile</h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <h1 className="font-display text-2xl font-bold text-slate-900 dark:text-slate-50">My Profile</h1>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             Keep your profile up to date so recruiters can find the real you.
           </p>
         </div>
@@ -162,18 +162,18 @@ export default function CandidateProfilePage() {
       {completenessPct < 100 && (
         <div className="card mb-6">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-slate-700">Profile completeness</p>
+            <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">Profile completeness</p>
             <p className="text-sm font-bold text-indigo-600">{completenessPct}%</p>
           </div>
-          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-100">
+          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
             <div
               className="h-full rounded-full bg-indigo-600 transition-all"
               style={{ width: `${completenessPct}%` }}
             />
           </div>
           {missing.length > 0 && (
-            <p className="mt-2.5 text-xs text-slate-500">
-              Still missing: <span className="font-medium text-slate-600">{missing.join(", ")}</span>
+            <p className="mt-2.5 text-xs text-slate-500 dark:text-slate-400">
+              Still missing: <span className="font-medium text-slate-600 dark:text-slate-400">{missing.join(", ")}</span>
             </p>
           )}
         </div>
@@ -191,17 +191,17 @@ export default function CandidateProfilePage() {
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
               <p className="label-field">Full name</p>
-              <p className="text-slate-900">{form.full_name || "—"}</p>
+              <p className="text-slate-900 dark:text-slate-50">{form.full_name || "—"}</p>
             </div>
             <div>
               <p className="label-field">Phone number</p>
-              <p className="text-slate-900">{form.phone || "—"}</p>
+              <p className="text-slate-900 dark:text-slate-50">{form.phone || "—"}</p>
             </div>
           </div>
 
           <div>
             <p className="label-field">Bio</p>
-            <p className="whitespace-pre-wrap text-slate-900">{form.bio || "—"}</p>
+            <p className="whitespace-pre-wrap text-slate-900 dark:text-slate-50">{form.bio || "—"}</p>
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2">
@@ -219,23 +219,23 @@ export default function CandidateProfilePage() {
                   ))}
                 </div>
               ) : (
-                <p className="text-slate-900">—</p>
+                <p className="text-slate-900 dark:text-slate-50">—</p>
               )}
             </div>
             <div>
               <p className="label-field">Experience</p>
-              <p className="text-slate-900">{form.experience || "—"}</p>
+              <p className="text-slate-900 dark:text-slate-50">{form.experience || "—"}</p>
             </div>
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
               <p className="label-field">GitHub link</p>
-              <p className="text-slate-900">{form.github_url || "—"}</p>
+              <p className="text-slate-900 dark:text-slate-50">{form.github_url || "—"}</p>
             </div>
             <div>
               <p className="label-field">LinkedIn link</p>
-              <p className="text-slate-900">{form.linkedin_url || "—"}</p>
+              <p className="text-slate-900 dark:text-slate-50">{form.linkedin_url || "—"}</p>
             </div>
           </div>
 
@@ -326,7 +326,7 @@ export default function CandidateProfilePage() {
             onUploaded={(url) => setForm({ ...form, resume_url: url })}
           />
 
-          <div className="flex justify-end gap-3 border-t border-slate-100 pt-5">
+          <div className="flex justify-end gap-3 border-t border-slate-100 dark:border-slate-800 pt-5">
             <button
               type="button"
               className="btn-secondary"
@@ -344,22 +344,22 @@ export default function CandidateProfilePage() {
         </form>
       )}
 
-      <div className="card mt-6 border border-red-100">
-        <h2 className="font-display text-lg font-semibold text-red-700">Danger zone</h2>
-        <p className="mt-1 text-sm text-slate-500">
+      <div className="card mt-6 border border-red-100 dark:border-red-900/40">
+        <h2 className="font-display text-lg font-semibold text-red-700 dark:text-red-400">Danger zone</h2>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
           Deleting your account is permanent. All your profile data will be removed and cannot be recovered.
         </p>
 
         {!confirmingDelete ? (
           <button
-            className="mt-4 rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+            className="mt-4 rounded-lg border border-red-300 dark:border-red-800 px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
             onClick={() => setConfirmingDelete(true)}
           >
             Delete Account
           </button>
         ) : (
           <div className="mt-4 flex items-center gap-3">
-            <p className="text-sm font-medium text-red-700">Are you sure? This cannot be undone.</p>
+            <p className="text-sm font-medium text-red-700 dark:text-red-400">Are you sure? This cannot be undone.</p>
             <button
               className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-60"
               onClick={handleDeleteAccount}
@@ -368,7 +368,7 @@ export default function CandidateProfilePage() {
               {deleting ? "Deleting..." : "Yes, delete my account"}
             </button>
             <button
-              className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
+              className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
               onClick={() => setConfirmingDelete(false)}
               disabled={deleting}
             >

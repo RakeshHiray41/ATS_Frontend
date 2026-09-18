@@ -16,6 +16,12 @@ A modern, production-ready **Applicant Tracking System (ATS)** frontend built wi
 - Track Job Applications
 - View Scheduled Interviews
 - Dashboard Overview
+- **Withdraw a submitted application**
+- **Application status timeline** (visual tracker per application)
+- **Profile completeness meter**
+- **View a company's public profile** from any job listing
+- **Skills-match score** on a job listing, based on the candidate's own profile
+- **In-app + email notifications** when an application's status changes
 
 ### 🏢 Recruiter
 - Recruiter Authentication
@@ -24,6 +30,18 @@ A modern, production-ready **Applicant Tracking System (ATS)** frontend built wi
 - View Applicants
 - Schedule Interviews
 - Recruiter Dashboard
+- **View a candidate's full profile** (details, resume, social links) from the applicants list
+- **Bulk shortlist / reject** selected applicants
+- **Duplicate-applicant detection** (flags a candidate who applied to more than one of your vacancies)
+- **Interview calendar view** (month view, in addition to the list view)
+- **CSV export** of the current applicant list
+
+### 🎨 UI / UX
+- **Dark mode**, toggleable, persisted per browser
+- **Collapsible sidebar** (desktop)
+- Skeleton loading states for tables and dashboard cards
+- Deterministic, per-candidate avatar colors
+- Similar-jobs recommendations on a job listing
 
 ### 🔐 Authentication
 - JWT Token Authentication

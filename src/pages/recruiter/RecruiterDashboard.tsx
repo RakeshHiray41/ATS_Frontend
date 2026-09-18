@@ -59,15 +59,37 @@ export default function RecruiterDashboard() {
               <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{label}</p>
             </div>
           ))}
-          <div className="card">
-            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-              <Building2 size={20} />
+          {stats?.company ? (
+            <div className="card">
+              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                <Building2 size={20} />
+              </div>
+              <p className="font-display text-lg font-bold text-slate-900 dark:text-slate-50 truncate">
+                {stats.company}
+              </p>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Company</p>
             </div>
-            <p className="font-display text-lg font-bold text-slate-900 dark:text-slate-50 truncate">
-              {stats?.company ?? "Not set up"}
-            </p>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Company</p>
-          </div>
+          ) : (
+            <Link
+              to="/recruiter/company"
+              className="card flex flex-col justify-between border-dashed border-amber-200 bg-amber-50/40 transition hover:border-amber-300 hover:bg-amber-50 dark:border-amber-900/40 dark:bg-amber-950/10 dark:hover:bg-amber-950/20"
+            >
+              <div>
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400">
+                  <Building2 size={20} />
+                </div>
+                <p className="font-display text-base font-bold text-slate-900 dark:text-slate-50">
+                  Company not set up
+                </p>
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                  Candidates can't see who's hiring yet.
+                </p>
+              </div>
+              <p className="mt-3 flex items-center gap-1 text-sm font-semibold text-amber-600 dark:text-amber-400">
+                Set up now <ArrowRight size={14} />
+              </p>
+            </Link>
+          )}
         </div>
       )}
 

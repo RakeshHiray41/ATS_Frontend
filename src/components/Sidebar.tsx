@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import ThemeToggle from "./ThemeToggle";
+import NotificationBell from "./NotificationBell";
 
 interface SidebarProps {
   open: boolean;
@@ -61,11 +62,11 @@ export default function Sidebar({ open, onClose, collapsed, onToggleCollapse }: 
         />
       )}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex flex-col bg-slate-900 transition-all duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-slate-900 transition-all duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
-        } ${collapsed ? "lg:w-20" : "w-64 lg:w-64"}`}
+        } ${collapsed ? "lg:w-20" : "lg:w-64"}`}
       >
-        <div className={`flex h-16 items-center px-5 ${collapsed ? "lg:justify-center lg:px-0" : "justify-between"}`}>
+        <div className={`flex h-16 items-center px-5 ${collapsed ? "lg:h-auto lg:flex-col lg:justify-center lg:gap-2 lg:px-2 lg:py-4" : "justify-between"}`}>
           <div className="flex items-center gap-2 font-display text-lg font-bold text-white">
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-600">
               <Briefcase size={18} />
@@ -74,9 +75,12 @@ export default function Sidebar({ open, onClose, collapsed, onToggleCollapse }: 
               Hire<span className="text-indigo-400">Track</span>
             </span>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white lg:hidden">
-            <X size={20} />
-          </button>
+          <div className="flex items-center gap-1">
+            <NotificationBell variant="onDark" />
+            <button onClick={onClose} className="text-slate-400 hover:text-white lg:hidden">
+              <X size={20} />
+            </button>
+          </div>
         </div>
 
         {/* Collapse/expand toggle — desktop only, mobile uses the hamburger + overlay instead */}

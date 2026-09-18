@@ -9,6 +9,7 @@ import {
   CalendarPlus,
   User as UserIcon,
   Copy,
+  FileDown,
 } from "lucide-react";
 import Loading from "../../components/Loading";
 import EmptyState from "../../components/EmptyState";
@@ -146,6 +147,28 @@ export default function ApplicantsPage() {
     });
   };
 
+  const handleExportCsv = () => {
+    const headers = ["Candidate Name", "Email", "Phone", "Job Title", "Applied On", "Status"];
+    const rows = filtered.map((app) => [
+      app.candidate_name ?? "",
+      app.candidate_email ?? "",
+      app.candidate_phone ?? "",
+      app.job_title ?? "",
+      app.applied_at ? new Date(app.applied_at).toLocaleDateString() : "",
+      formatStatusLabel(app.status ?? ""),
+    ]);
+    const escapeCell = (cell: string) => `"${String(cell).replace(/"/g, '""')}"`;
+    const csv = [headers, ...rows].map((row) => row.map(escapeCell).join(",")).join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `applicants-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   const handleBulkStatusChange = async (status: string) => {
     const ids = Array.from(selectedIds);
     if (ids.length === 0) return;
@@ -220,18 +243,27 @@ export default function ApplicantsPage() {
 
           {/* Main list */}
           <div className="min-w-0">
-            <div className="mb-4 flex items-center justify-between gap-3">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
               <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                 ({filtered.length}) Candidates Found
               </p>
-              <div className="relative w-full max-w-xs">
-                <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  className="input-field !pl-9"
-                  placeholder="Search"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleExportCsv}
+                  disabled={filtered.length === 0}
+                  className="btn-secondary !px-3 !py-2 text-xs disabled:opacity-50"
+                >
+                  <FileDown size={14} /> Export CSV
+                </button>
+                <div className="relative w-full max-w-xs">
+                  <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    className="input-field !pl-9"
+                    placeholder="Search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </div>
               </div>
             </div>
 
